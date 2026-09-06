@@ -198,12 +198,12 @@ input:checked + .toggle-slider:before { transform: translateX(18px); background:
 }
 
 .chat-header-mobile {
-  padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
+  padding-top: calc(env(safe-area-inset-top, 0px) + 20px);
   padding-bottom: 12px;
 }
 
 .chat-input-mobile {
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 2px);
 }
 
 @media (max-width: 768px) {
