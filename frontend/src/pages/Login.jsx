@@ -27,16 +27,9 @@ export default function Login() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh', display: 'flex', background: '#f0f2f5',
-      fontFamily: "'Inter', sans-serif"
-    }}>
+    <div className="auth-page">
       {/* Left panel — branding */}
-      <div style={{
-        flex: 1, display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', padding: '60px 80px',
-        background: 'white', borderRight: '1px solid #e4e6ea'
-      }}>
+      <div className="auth-left">
         <div style={{ maxWidth: '440px' }}>
           {/* Logo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '40px' }}>
@@ -77,7 +70,7 @@ export default function Login() {
       </div>
 
       {/* Right panel — form */}
-      <div style={{ width: '440px', flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 48px', background: '#f0f2f5' }}>
+      <div className="auth-right">
         <div style={{ width: '100%', maxWidth: '360px' }}>
           <div style={{ background: 'white', borderRadius: '16px', padding: '36px 32px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid #e4e6ea' }}>
             <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#1c1e21', marginBottom: '6px' }}>Đăng nhập</h2>
@@ -115,8 +108,6 @@ export default function Login() {
           </div>
         </div>
       </div>
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

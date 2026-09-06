@@ -35,9 +35,9 @@ export default function Register() {
     { label: 'Mạnh', color: '#22c55e', pct: '100%' };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: '#f0f2f5', fontFamily: "'Inter', sans-serif" }}>
+    <div className="auth-page">
       {/* Left — branding */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px 80px', background: 'white', borderRight: '1px solid #e4e6ea' }}>
+      <div className="auth-left">
         <div style={{ maxWidth: '440px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '40px' }}>
             <div style={{ width: '52px', height: '52px', borderRadius: '16px', background: '#0084ff', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,132,255,0.3)' }}>
@@ -66,7 +66,7 @@ export default function Register() {
       </div>
 
       {/* Right — form */}
-      <div style={{ width: '440px', flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 48px', background: '#f0f2f5' }}>
+      <div className="auth-right">
         <div style={{ width: '100%', maxWidth: '360px' }}>
           {success ? (
             <div style={{ background: 'white', borderRadius: '16px', padding: '48px 32px', textAlign: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid #e4e6ea' }}>
@@ -136,17 +136,6 @@ export default function Register() {
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes progress { from { width: 0% } to { width: 100% } }
-        .app-input { width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid #e4e6ea;background:white;color:#1c1e21;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s,box-shadow 0.2s;box-sizing:border-box; }
-        .app-input:focus { border-color:#0084ff;box-shadow:0 0 0 3px rgba(0,132,255,0.12); }
-        .app-input::placeholder { color:#b0b3b8; }
-        .btn-primary { width:100%;padding:12px;border-radius:10px;background:#0084ff;color:white;border:none;font-weight:600;font-size:15px;cursor:pointer;font-family:inherit;transition:background 0.2s,transform 0.15s;box-shadow:0 2px 8px rgba(0,132,255,0.3); }
-        .btn-primary:hover { background:#0070d8; }
-        .btn-primary:disabled { background:#b0ccf8;box-shadow:none;cursor:not-allowed; }
-      `}</style>
     </div>
   );
 }

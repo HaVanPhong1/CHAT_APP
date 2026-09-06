@@ -63,6 +63,50 @@ export default function Home() {
     setSelectedConversation(prev => prev && prev._id === conversationId ? { ...prev, nickname } : prev);
   };
 
+  const [showMobileSidebar, setShowMobileSidebar] = useState(true);
+
+  const handleMobileSelectGroup = (g) => {
+    const sameGroup = selectedGroup?._id === g._id && activeTab === 'group';
+    if (!sameGroup) { setMessages([]); setTranslations({}); }
+    setSelectedConversation(null);
+    setSelectedGroup(prev => (prev?._id === g._id ? prev : g));
+    setActiveTab('group');
+    setShowMobileSidebar(false);
+  };
+
+  const handleMobileSelectConversation = (c) => {
+    const sameConv = selectedConversation?._id === c._id && activeTab === 'dm';
+    if (!sameConv) { setMessages([]); setTranslations({}); }
+    setSelectedGroup(null);
+    setSelectedConversation(prev => (prev?._id === c._id ? prev : c));
+    setActiveTab('dm');
+    setShowMobileSidebar(false);
+  };
+
+  const handleMobileOpenDm = async (username, providedConv) => {
+    try {
+      let conv = providedConv;
+      if (!conv) conv = await apiRequest('/api/dm/start', 'POST', { username });
+      const existing = conversations.find(c => c._id === conv._id);
+      const target = existing || conv;
+      setSelectedGroup(null);
+      setSelectedConversation(prev => (prev?._id === target._id ? prev : target));
+      if (!(existing && activeTab === 'dm')) {
+        setMessages([]);
+        setTranslations({});
+        setActiveTab('dm');
+      }
+      loadConversations();
+      setShowMobileSidebar(false);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleBackToSidebar = () => {
+    setShowMobileSidebar(true);
+  };
+
   const currentChatThemeColor = (selectedGroup && groupSettings[selectedGroup._id]?.themeColor) || '#0084ff';
   const currentChatFontSize = (selectedGroup && groupSettings[selectedGroup._id]?.fontSize) || '15px';
 
@@ -321,9 +365,9 @@ export default function Home() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', position: 'relative' }}>
+    <div className="app-layout">
       {/* Left Panel */}
-      <div style={{ width: '280px', backgroundColor: 'var(--bg-sidebar)', borderRight: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
+      <div className={`app-sidebar ${!showMobileSidebar ? 'hidden-mobile' : ''}`}>
         {/* User Profile */}
         <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid var(--border-color)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', backgroundColor: '#ffffff', padding: '12px 14px', borderRadius: '12px', boxShadow: 'var(--shadow-sm)' }}>
@@ -364,40 +408,9 @@ export default function Home() {
             }}
             selectedGroup={selectedGroup}
             selectedConversation={selectedConversation}
-            onSelectGroup={(g) => {
-              const sameGroup = selectedGroup?._id === g._id && activeTab === 'group';
-              if (!sameGroup) { setMessages([]); setTranslations({}); }
-              setSelectedConversation(null);
-              setSelectedGroup(prev => (prev?._id === g._id ? prev : g));
-              setActiveTab('group');
-            }}
-            onSelectConversation={(c) => {
-              const sameConv = selectedConversation?._id === c._id && activeTab === 'dm';
-              if (!sameConv) { setMessages([]); setTranslations({}); }
-              setSelectedGroup(null);
-              setSelectedConversation(prev => (prev?._id === c._id ? prev : c));
-              setActiveTab('dm');
-            }}
-            onOpenDm={async (username, providedConv) => {
-              try {
-                let conv = providedConv;
-                if (!conv) conv = await apiRequest('/api/dm/start', 'POST', { username });
-                const existing = conversations.find(c => c._id === conv._id);
-                const target = existing || conv;
-                setSelectedGroup(null);
-                setSelectedConversation(prev => (prev?._id === target._id ? prev : target));
-                if (existing && activeTab === 'dm') {
-                  // already in this conv, do nothing
-                } else {
-                  setMessages([]);
-                  setTranslations({});
-                  setActiveTab('dm');
-                }
-                loadConversations();
-              } catch (err) {
-                alert(err.message);
-              }
-            }}
+            onSelectGroup={handleMobileSelectGroup}
+            onSelectConversation={handleMobileSelectConversation}
+            onOpenDm={handleMobileOpenDm}
             onGroupsChange={loadGroups}
             onConversationsChange={loadConversations}
             onDeleteGroup={async (groupId) => {
@@ -435,45 +448,52 @@ export default function Home() {
       </div>
 
       {/* Chat Area with per-conversation color & font size */}
-      <ChatArea
-        messages={messages}
-        translations={translations}
-        translating={translating}
-        autoTranslate={autoTranslate}
-        setAutoTranslate={setAutoTranslate}
-        onSendMessage={handleSendMessage}
-        onTranslate={handleTranslate}
-        onSendFile={handleSendFile}
-        selectedGroup={activeTab === 'group' ? selectedGroup : (selectedConversation ? { _id: selectedConversation._id, name: selectedConversation.nickname || selectedConversation.other?.username || 'Chat', isDm: true, conversationId: selectedConversation._id } : null)}
-        currentUser={user}
-        chatThemeColor={currentChatThemeColor}
-        chatFontSize={currentChatFontSize}
-        onUpdateChatSettings={updateGroupSettings}
-        onEditMessage={handleEditMessage}
-        onDeleteMessage={handleDeleteMessage}
-        onLeaveGroup={async (groupId) => {
-          try {
-            await apiRequest(`/api/groups/${groupId}/leave`, 'POST');
-            setSelectedGroup(null);
-            setMessages([]);
-            loadGroups();
-          } catch (err) {
-            alert(err.message);
-          }
-        }}
-        onDeleteConversation={async (groupId) => {
-          try {
-            await apiRequest(`/api/groups/${groupId}`, 'DELETE');
-            setSelectedGroup(null);
-            setMessages([]);
-            loadGroups();
-          } catch (err) {
-            alert(err.message);
-          }
-        }}
-        onRenameGroup={handleRenameGroup}
-        onSetDmNickname={handleSetDmNickname}
-      />
+      <div className={`app-chat-area ${showMobileSidebar ? 'hidden-mobile' : ''}`}>
+        {(selectedGroup || selectedConversation) && (
+          <button className="mobile-back-button" onClick={handleBackToSidebar}>
+            ← Quay lại danh sách
+          </button>
+        )}
+        <ChatArea
+          messages={messages}
+          translations={translations}
+          translating={translating}
+          autoTranslate={autoTranslate}
+          setAutoTranslate={setAutoTranslate}
+          onSendMessage={handleSendMessage}
+          onTranslate={handleTranslate}
+          onSendFile={handleSendFile}
+          selectedGroup={activeTab === 'group' ? selectedGroup : (selectedConversation ? { _id: selectedConversation._id, name: selectedConversation.nickname || selectedConversation.other?.username || 'Chat', isDm: true, conversationId: selectedConversation._id } : null)}
+          currentUser={user}
+          chatThemeColor={currentChatThemeColor}
+          chatFontSize={currentChatFontSize}
+          onUpdateChatSettings={updateGroupSettings}
+          onEditMessage={handleEditMessage}
+          onDeleteMessage={handleDeleteMessage}
+          onLeaveGroup={async (groupId) => {
+            try {
+              await apiRequest(`/api/groups/${groupId}/leave`, 'POST');
+              setSelectedGroup(null);
+              setMessages([]);
+              loadGroups();
+            } catch (err) {
+              alert(err.message);
+            }
+          }}
+          onDeleteConversation={async (groupId) => {
+            try {
+              await apiRequest(`/api/groups/${groupId}`, 'DELETE');
+              setSelectedGroup(null);
+              setMessages([]);
+              loadGroups();
+            } catch (err) {
+              alert(err.message);
+            }
+          }}
+          onRenameGroup={handleRenameGroup}
+          onSetDmNickname={handleSetDmNickname}
+        />
+      </div>
     </div>
   );
 }
