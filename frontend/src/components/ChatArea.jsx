@@ -346,21 +346,28 @@ export default function ChatArea({
   const groupName = displayGroupName || (selectedGroup && typeof selectedGroup.name === 'string' ? selectedGroup.name : 'Cuộc trò chuyện');
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
-      {/* Header */}
+    <div style={{ 
+      flex: 1, 
+      display: 'flex', 
+      flexDirection: 'column', 
+      height: '100%', 
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* 1. Header: Ghim cố định ở đỉnh, né thanh điều hướng browser */}
       <div style={{ 
         position: 'sticky',
         top: 0,
-        zIndex: 20,
-        height: '70px', 
-        padding: '0 20px',
-        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)',
+        zIndex: 30,
         backgroundColor: '#ffffff',
         borderBottom: '1px solid var(--border-color)', 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'space-between',
-        flexShrink: 0
+        flexShrink: 0,
+        padding: '0 20px',
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 14px)',
+        paddingBottom: '12px'
       }} className="chat-header-mobile">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {onBackToSidebar && (
@@ -570,8 +577,13 @@ export default function ChatArea({
          </div>
        </div>
 
-      {/* Message List */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px' }}>
+       {/* 2. Chat Scroll Area: Duy nhất phần này được cuộn */}
+       <div style={{ 
+         flex: 1, 
+         overflowY: 'auto', 
+         padding: '20px 24px',
+         paddingBottom: '8px'
+       }}>
         {/* Search Bar */}
         {showSearch && (
           <div style={{
@@ -629,8 +641,14 @@ export default function ChatArea({
         <div ref={endOfMessagesRef} />
       </div>
 
-      {/* Input Area */}
-      <div style={{ padding: '12px 24px 16px', backgroundColor: '#ffffff', borderTop: '1px solid var(--border-color)', flexShrink: 0 }}>
+       {/* 3. Input Bar: Gọn gàng sát đáy */}
+       <div style={{ 
+         flexShrink: 0, 
+         backgroundColor: '#ffffff', 
+         borderTop: '1px solid var(--border-color)',
+         padding: '10px 20px',
+         paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 8px)'
+       }} className="chat-input-mobile">
         {/* Reply Preview Banner */}
         {replyingTo && (
           <div style={{
@@ -698,13 +716,13 @@ export default function ChatArea({
           </div>
         )}
         
-        <form onSubmit={handleSend} style={{
-          display: 'flex', alignItems: 'center', gap: '10px',
-          backgroundColor: 'var(--panel-alt)', borderRadius: '24px', padding: '8px 8px 8px 18px',
-          border: input.toLowerCase().includes('@ai') ? '1px solid var(--accent-bot)' : (editingMessage ? '1px solid #f59e0b' : '1px solid var(--border-color)'),
-          transition: 'all 0.3s ease',
-          boxShadow: input.toLowerCase().includes('@ai') ? '0 0 12px rgba(168, 85, 247, 0.3)' : 'none'
-        }}>
+         <form onSubmit={handleSend} style={{
+           display: 'flex', alignItems: 'center', gap: '8px',
+           backgroundColor: 'var(--panel-alt)', borderRadius: '24px', padding: '6px 6px 6px 16px',
+           border: input.toLowerCase().includes('@ai') ? '1px solid var(--accent-bot)' : (editingMessage ? '1px solid #f59e0b' : '1px solid var(--border-color)'),
+           transition: 'all 0.3s ease',
+           boxShadow: input.toLowerCase().includes('@ai') ? '0 0 12px rgba(168, 85, 247, 0.3)' : 'none'
+         }}>
           {input.toLowerCase().includes('@ai') && (
             <Sparkles size={18} color="var(--accent-bot)" style={{ flexShrink: 0 }} />
           )}
