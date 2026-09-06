@@ -341,7 +341,7 @@ const FRONTEND_DIR = path.join(__dirname, '..', 'frontend', 'dist');
 
 if (process.env.NODE_ENV === 'production' || process.env.SERVE_FRONTEND === 'true') {
   app.use(express.static(FRONTEND_DIR));
-  app.get('*', (req, res) => {
+  app.get('/{*splat}', (req, res) => {
     res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
   });
 }
