@@ -193,6 +193,16 @@ input:checked + .toggle-slider:before { transform: translateX(18px); background:
   flex-shrink: 0;
 }
 
+.mobile-header-back {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-header-back {
+    display: flex;
+  }
+}
+
 .auth-page {
   display: flex;
   min-height: 100vh;

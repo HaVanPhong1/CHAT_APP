@@ -449,14 +449,6 @@ export default function Home() {
 
       {/* Chat Area with per-conversation color & font size */}
       <div className={`app-chat-area ${showMobileSidebar ? 'hidden-mobile' : ''}`}>
-        {(selectedGroup || selectedConversation) && (
-          <button className="mobile-back-button" onClick={handleBackToSidebar}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-            Quay lại danh sách
-          </button>
-        )}
         <ChatArea
           messages={messages}
           translations={translations}
@@ -495,6 +487,7 @@ export default function Home() {
           }}
           onRenameGroup={handleRenameGroup}
           onSetDmNickname={handleSetDmNickname}
+          onBackToSidebar={handleBackToSidebar}
         />
       </div>
     </div>

@@ -3,7 +3,7 @@ import MessageItem from './MessageItem';
 import { 
   Send, Sparkles, Paperclip, Mic, StopCircle, 
   Palette, X, Reply, Pencil, Trash2, Globe, RotateCcw,
-  MoreVertical, Search, Users, Tag
+  MoreVertical, Search, Users, Tag, ArrowLeft
 } from 'lucide-react';
 
 export default function ChatArea({ 
@@ -25,7 +25,8 @@ export default function ChatArea({
   onLeaveGroup,
   onDeleteConversation,
   onRenameGroup,
-  onSetDmNickname
+  onSetDmNickname,
+  onBackToSidebar
 }) {
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
@@ -348,11 +349,42 @@ export default function ChatArea({
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
       {/* Header */}
       <div style={{ 
-        height: '70px', padding: '0 24px', backgroundColor: '#ffffff',
-        borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        position: 'sticky',
+        top: 0,
+        zIndex: 20,
+        height: '70px', 
+        padding: '0 20px', 
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid var(--border-color)', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
         flexShrink: 0
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {onBackToSidebar && (
+            <button
+              type="button"
+              onClick={onBackToSidebar}
+              title="Quay lại danh sách"
+              className="mobile-header-back"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                border: 'none',
+                background: '#f0f2f5',
+                cursor: 'pointer',
+                color: 'var(--text-primary)',
+                flexShrink: 0
+              }}
+            >
+              <ArrowLeft size={20} />
+            </button>
+          )}
           <div style={{
             width: '40px', height: '40px', borderRadius: '10px', background: `linear-gradient(135deg, ${chatThemeColor}, var(--accent-bot))`,
             display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 'bold', fontSize: '17px',
