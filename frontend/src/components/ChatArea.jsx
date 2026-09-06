@@ -353,14 +353,15 @@ export default function ChatArea({
         top: 0,
         zIndex: 20,
         height: '70px', 
-        padding: '0 20px', 
+        padding: '0 20px',
+        paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid var(--border-color)', 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'space-between',
         flexShrink: 0
-      }}>
+      }} className="chat-header-mobile">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {onBackToSidebar && (
             <button
