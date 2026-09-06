@@ -126,6 +126,12 @@ export default function Home() {
     loadFriends();
   }, [loadGroups, loadConversations, loadFriendRequests, loadFriends]);
 
+  useEffect(() => {
+    setSelectedGroup(null);
+    setSelectedConversation(null);
+    setMessages([]);
+  }, [user?.id]);
+
   // Socket setup
   useEffect(() => {
     const socket = getSocket();

@@ -482,6 +482,22 @@ export default function ChatArea({
                         <span>Xem danh sách thành viên</span>
                       </button>
                       <div style={{ height: '1px', background: 'var(--border-color)', margin: '4px 0' }} />
+                      {!selectedGroup?.isDm && (
+                        <button
+                          onClick={() => setShowNicknameModal(true)}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            padding: '10px 16px', border: 'none', background: 'transparent',
+                            cursor: 'pointer', fontSize: '13px', color: 'var(--text-primary)',
+                            textAlign: 'left', width: '100%', transition: 'background 0.15s'
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--hover-bg)'}
+                          onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                        >
+                          <Tag size={15} color="#f59e0b" />
+                          <span>Đổi tên nhóm</span>
+                        </button>
+                      )}
                       {selectedGroup?.members && selectedGroup?.ownerId === currentUser?.id && (
                         <button
                           onClick={handleDeleteConversation}
