@@ -1,14 +1,19 @@
 import { io } from 'socket.io-client';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+const API_URL = 
+  import.meta.env.VITE_API_URL || 
+  import.meta.env.VITE_API_BASE_URL || 
+  import.meta.env.VITE_BACKEND_URL || 
+  'https://aichat-backend-avw7.onrender.com';
+
+const BACKEND_URL = API_URL;
 
 let socket = null;
 
 export const getSocket = () => {
   if (!socket) {
     const token = localStorage.getItem('token');
-    const url = BACKEND_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000');
-    socket = io(url, {
+    socket = io(BACKEND_URL, {
       auth: { token }
     });
   }
@@ -24,7 +29,6 @@ export const disconnectSocket = () => {
 
 export const apiRequest = async (endpoint, method = 'GET', body = null) => {
   const token = localStorage.getItem('token');
-  const baseUrl = BACKEND_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5000');
   const options = {
     method,
     headers: {
@@ -33,7 +37,7 @@ export const apiRequest = async (endpoint, method = 'GET', body = null) => {
     },
     ...(body && { body: JSON.stringify(body) })
   };
-  const res = await fetch(`${baseUrl}${endpoint}`, options);
+  const res = await fetch(`${BACKEND_URL}${endpoint}`, options);
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || 'Lỗi server');
   return data;
